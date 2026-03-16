@@ -18,7 +18,7 @@ class UserController
     public function register(): void
     {
         $errors = [];
-        $succes = '';
+        $success = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
                 
@@ -55,7 +55,7 @@ class UserController
                         ':email'    => $email,
                         ':password' => $password,
                     ]);
-                    $succes = "Inscription réussie.";
+                    $success = "Inscription réussie.";
             }
         }
 
@@ -68,7 +68,7 @@ class UserController
     public function login(): void
     {
         if(isset($_SESSION['user_id'])){
-            header('Location: /gamekeepe/public/?url=user/profile');
+            header('Location: /gamekeeper/public/?url=user/profile');
             exit;
         }
 
@@ -89,7 +89,7 @@ class UserController
                     $_SESSION['user_id']  = $user ['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['role']     = $user['role'];
-                    header('Location:/gamekeeper/public/?url=user/profile');
+                    header('Location: /gamekeeper/public/?url=user/profile');
                     exit;
                 }
             }
@@ -113,7 +113,7 @@ class UserController
     {
         $this->requireAuth();
         $errors = [];
-        $succes = '';
+        $success = '';
         $user   = $this->userModel->findByID($_SESSION['user_id']);
         require_once __DIR__ . '/../Views/user/profile.php';
     }
@@ -124,7 +124,7 @@ class UserController
     {
         $this->requireAuth();
         $errors = [];
-        $succes = '';
+        $success = '';
         $user   = $this->userModel->findByID($_SESSION['user_id']);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -143,7 +143,7 @@ class UserController
 
                 if(empty($errors)){
                     $existing = $this->userModel->findByUsername($username);
-                    if($existing && (int)$existing['id'] !== (int)$_SESSION['user_id']){
+                    if ($existing && (int)$existing['id'] !== (int)$_SESSION['user_id'])
                         $errors[] = "Ce nom d'utilisateur est déjà pris.";
 
                     $existingEmail = $this->userModel->findByEmail($email);
@@ -151,8 +151,16 @@ class UserController
                         $errors[] = "Cette adresse email est déjà utilisé.";
                     }
 
-                    }
                 }
+            }
+        }
+    }
+
+        private functioon requireAuth(): void
+        {
+            if(!isset($_SESSION['user_id'])){
+                header('Location: /gamekeeper/public/?url=user/login');
+                exit;
             }
         }
     }

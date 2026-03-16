@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class User extends Model
+class UserModel extends Model
 {
     protected string $table = 'users';
 
@@ -30,7 +30,7 @@ class User extends Model
 
         $stmt = $this->db->prepare("
         INSERT INTO users (username, email, password)
-        VALUES (:username, :email, :password
+        VALUES (:username, :email, :password)
         ");
         return $stmt->execute($data);
     }
