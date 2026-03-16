@@ -118,79 +118,81 @@ class UserController
 
 
     // Modification
-    public function edit():void
+    public function edit(): void
     {
         $this->requireAuth();
         $errors = [];
         $success = '';
-        $user   = $this->userModel->findByID($_SESSION['user_id']);
+        $user = $this->userModel->findByID($_SESSION['user_id']);
 
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $type = $_POST['type'] ?? '';
 
-            if($type === 'info'){
+            if ($type === 'info') {
                 $username = trim($_POST['username'] ?? '');
                 $email    = trim($_POST['email']    ?? '');
 
-                if (empty($username)){
-                    $errors[] = "Le nom d'utilisateur est requis."; 
+                if (empty($username)) {
+                    $errors[] = "Le nom d'utilisateur est requis.";
                 }
-                if(empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+                if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     $errors[] = "L'email est invalide.";
                 }
 
-                if(empty($errors)){
+                if (empty($errors)) {
                     $existing = $this->userModel->findByUsername($username);
-                    if ($existing && (int)$existing['id'] !== (int)$_SESSION['user_id'])
+                    if ($existing && (int)$existing['id'] !== (int)$_SESSION['user_id']) {
                         $errors[] = "Ce nom d'utilisateur est déjà pris.";
+                    }
 
                     $existingEmail = $this->userModel->findByEmail($email);
-                    if($existingEmail && (int)$existingEmail['id'] !== (int)$_SESSION['user_id']){
-                        $errors[] = "Cette adresse email est déjà utilisé.";
+                    if ($existingEmail && (int)$existingEmail['id'] !== (int)$_SESSION['user_id']) {
+                        $errors[] = "Cette adresse email est déjà utilisée.";
                     }
-                
-                    if(empty($errors)){
-                        $this->userModel->updateInfo($_SESSION['user_id'],[
+
+                    if (empty($errors)) {
+                        $this->userModel->updateInfo($_SESSION['user_id'], [
                             ':username' => $username,
                             ':email'    => $email,
                         ]);
                         $_SESSION['username'] = $username;
-                        $success = "Information mises à jour.";
+                        $success = "Informations mises à jour.";
                         $user = $this->userModel->findByID($_SESSION['user_id']);
                     }
-                } elseif ($type === 'password'){
-                    $current = $_POST['current_password'] ?? '';
-                    $new     = $_POST['new_password']     ?? '';
-                    $confirm = $_POST['confirm_password'] ?? '';
+                }
 
-                    if (!password_verify($current, $user['password'])){
-                        $errors[] = "Mot de passe actuel incorrect.";
-                    }
-                    if(strlen($new) < 8){
-                        $errors[] = "Le nouveau mot de passe doit faire au moins 8 caractères.";
-                    }
-                    if($new !== $confirm){
-                        $errors[] = "Les mots de passe ne correspondent pas.";
-                    }
+            } elseif ($type === 'password') {
+                $current = $_POST['current_password'] ?? '';
+                $new     = $_POST['new_password']     ?? '';
+                $confirm = $_POST['confirm_password'] ?? '';
 
-                    if(empty($errors)){
-                        $this->userModel->updatePassword($_SESSION['user_id'], $new);
-                        $success = "Mot de passe mis à jour.";
-                    }
+                if (!password_verify($current, $user['password'])) {
+                    $errors[] = "Mot de passe actuel incorrect.";
+                }
+                if (strlen($new) < 8) {
+                    $errors[] = "Le nouveau mot de passe doit faire au moins 8 caractères.";
+                }
+                if ($new !== $confirm) {
+                    $errors[] = "Les mots de passe ne correspondent pas.";
+                }
 
+                if (empty($errors)) {
+                    $this->userModel->updatePassword($_SESSION['user_id'], $new);
+                    $success = "Mot de passe mis à jour.";
                 }
             }
-            require_once __DIR__ . '/../Views/user/profile.php';
         }
+
+        require_once __DIR__ . '/../Views/user/profile.php';
     }
-    
+
 
     // Si l'utilisateur est connecté
     private function requireAuth(): void
     {
-        if(!isset($_SESSION['user_id'])){
+        if (!isset($_SESSION['user_id'])) {
             header('Location: /gamekeeper/public/?url=user/login');
             exit;
-            }
         }
+    }
 }

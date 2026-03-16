@@ -10,7 +10,7 @@ abstract class Model
     protected PDO $db;
     protected string $table;
 
-    public function __construc()
+    public function __construct()
     {
         $database = new Database();
         $this->db = $database->getConnection();
@@ -31,7 +31,7 @@ abstract class Model
 
     public function delete(int $id): bool
     {
-        $stmt = $this->db->prepare("DELETE * FROM {$this->table} WHERE id = :id");
+        $stmt = $this->db->prepare("DELETE FROM {$this->table} WHERE id = :id");
         return $stmt->execute([':id' => $id]);
     }
 }
