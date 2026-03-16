@@ -13,8 +13,8 @@ class UserController
         $this->userModel = new UserModel();
     }
 
-    // Inscription
 
+    // Inscription
     public function register(): void
     {
         $errors = [];
@@ -30,8 +30,8 @@ class UserController
             if (empty($username)){
                 $errors[] = "Le nom d'utilisateur est requis.";
             }
-            if (empty($email)){
-                $errors[] = "L'adreese email est invalide.";
+            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $errors[] = "L'adresse email est invalide.";
             }
             if (strlen($password) < 8){
                 $errors[] = "Le mot de passe doit contenir au moins 8 caractères.";
@@ -64,7 +64,6 @@ class UserController
 
 
     // Connexion
-
     public function login(): void
     {
         if(isset($_SESSION['user_id'])){
@@ -99,7 +98,6 @@ class UserController
     }
 
     // Déconnexion 
-
     public function logout(): void
     {
         session_destroy();
@@ -107,8 +105,8 @@ class UserController
         exit;
     }
 
-    // Profil
 
+    // Profil
     public function profile(): void
     {
         $this->requireAuth();
@@ -118,8 +116,8 @@ class UserController
         require_once __DIR__ . '/../Views/user/profile.php';
     }
 
-    // Modification
 
+    // Modification
     public function edit():void
     {
         $this->requireAuth();
@@ -150,18 +148,49 @@ class UserController
                     if($existingEmail && (int)$existingEmail['id'] !== (int)$_SESSION['user_id']){
                         $errors[] = "Cette adresse email est déjà utilisé.";
                     }
+                
+                    if(empty($errors)){
+                        $this->userModel->updateInfo($_SESSION['user_id'],[
+                            ':username' => $username,
+                            ':email'    => $email,
+                        ]);
+                        $_SESSION['username'] = $username;
+                        $success = "Information mises à jour.";
+                        $user = $this->userModel->findByID($_SESSION['user_id']);
+                    }
+                } elseif ($type === 'password'){
+                    $current = $_POST['current_password'] ?? '';
+                    $new     = $_POST['new_password']     ?? '';
+                    $confirm = $_POST['confirm_password'] ?? '';
+
+                    if (!password_verify($current, $user['password'])){
+                        $errors[] = "Mot de passe actuel incorrect.";
+                    }
+                    if(strlen($new) < 8){
+                        $errors[] = "Le nouveau mot de passe doit faire au moins 8 caractères.";
+                    }
+                    if($new !== $confirm){
+                        $errors[] = "Les mots de passe ne correspondent pas.";
+                    }
+
+                    if(empty($errors)){
+                        $this->userModel->updatePassword($_SESSION['user_id'], $new);
+                        $success = "Mot de passe mis à jour.";
+                    }
 
                 }
             }
+            require_once __DIR__ . '/../Views/user/profile.php';
         }
     }
+    
 
-        private functioon requireAuth(): void
-        {
-            if(!isset($_SESSION['user_id'])){
-                header('Location: /gamekeeper/public/?url=user/login');
-                exit;
+    // Si l'utilisateur est connecté
+    private function requireAuth(): void
+    {
+        if(!isset($_SESSION['user_id'])){
+            header('Location: /gamekeeper/public/?url=user/login');
+            exit;
             }
         }
-    }
 }
