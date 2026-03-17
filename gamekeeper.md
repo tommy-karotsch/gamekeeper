@@ -85,11 +85,11 @@ Relations :
 - ✅ app/Models/Model.php
 - ✅ app/Models/UserModel.php 
 - ✅ app/Controllers/UserController.php
+- ✅ Composer pas configuré (PSR-4, autoload)
+- ✅ app/Router.php
+- ✅ public/index.php 
 
 ## À faire
-- ⬜ public/index.php — vide
 - ⬜ user/login — vides
 - ⬜ user/register — vides
 - ⬜ user/profile — vides
-- ⬜ Composer pas configuré (PSR-4, autoload)
-- ⬜ app/Router.php — vide
