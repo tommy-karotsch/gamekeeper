@@ -46,4 +46,12 @@ class GenreController
         header('Location: /gamekeeper/public/?url=genre/index');
         exit;
     }
+
+    private function requireAdmin(): void
+    {
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            header('Location: /gamekeeper/public/?url=user/login');
+            exit;
+        }
+    }
 }

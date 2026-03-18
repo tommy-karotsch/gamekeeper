@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\PlatformModel;
 
-class PlateformController
+class PlatformController
 {
     private PlatformModel $platformModel;
 
@@ -15,17 +15,20 @@ class PlateformController
 
     public function index(): void
     {
+        $this->requireAdmin();
         $platforms = $this->platformModel->findAll();
         require_once __DIR__ . '/../Views/platform/index.php';
     }
 
     public function create(): void
     {
+        $this->requireAdmin();
         require_once __DIR__ . '/../Views/platform/create.php';
     }
 
     public function store(): void
     {
+        $this->requireAdmin();
         if($_SERVER['REQUEST_METHOD'] === 'POST')
             {
                 $name = trim($_POST['name'] ?? '');
@@ -40,10 +43,19 @@ class PlateformController
     
     public function delete(): void 
     {
+        $this->requireAdmin();
         $id = $_GET['id'] ?? null;
 
         $this->platformModel->delete((int)$id);
         header('Location: /gamekeeper/public/?url=platform/index');
         exit;
+    }
+
+    private function requireAdmin(): void
+    {
+        if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+            header('Location: /gamekeeper/public/?url=user/login');
+            exit;
+        }
     }
 }
