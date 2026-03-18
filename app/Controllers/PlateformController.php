@@ -21,7 +21,7 @@ class PlateformController
 
     public function create(): void
     {
-        require_once __DIR__ . '../Views/platform/create.php';
+        require_once __DIR__ . '/../Views/platform/create.php';
     }
 
     public function store(): void

@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Models\GenreModel;
 
-class PlateformController
+class GenreController
 {
     private GenreModel $genreModel;
 

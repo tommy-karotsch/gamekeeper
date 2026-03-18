@@ -10,7 +10,7 @@ class GenreModel extends Model
     {
         $stmt = $this->db->prepare("
         INSERT INTO genres (name)
-        VALUE (:name)
+        VALUES (:name)
         ");
         return $stmt->execute($data);
     }

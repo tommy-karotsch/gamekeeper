@@ -11,7 +11,7 @@ class PlatformModel extends Model
     {
         $stmt = $this->db->prepare("
         INSERT INTO platforms (name)
-        VALUE (:name)
+        VALUES (:name)
         ");
         return $stmt->execute($data);
     }
