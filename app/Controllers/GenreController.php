@@ -15,17 +15,20 @@ class GenreController
 
     public function index(): void
     {
+        $this->requireAdmin();
         $genres = $this->genreModel->findAll();
         require_once __DIR__ . '/../Views/genre/index.php';
     }
 
     public function create(): void
     {
+        $this->requireAdmin();
         require_once __DIR__ . '/../Views/genre/create.php';
     }
 
     public function store(): void
     {
+        $this->requireAdmin();
         if($_SERVER['REQUEST_METHOD'] === 'POST')
             {
                 $name = trim($_POST['name'] ?? '');
@@ -40,6 +43,7 @@ class GenreController
 
     public function delete(): void
     {
+        $this->requireAdmin();
         $id = $_GET['id'] ?? null;
 
         $this->genreModel->delete((int)$id);

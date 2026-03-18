@@ -86,23 +86,23 @@ Relations :
 - Template Figma existant (non prioritaire)
 
 ## Avancement
-- ✅ BDD créée
-- ✅ Structure de dossiers en place
+- ✅ BDD créée et importée
 - ✅ Composer configuré (PSR-4, autoload)
 - ✅ config/Database.php
 - ✅ app/Models/Model.php
 - ✅ app/Models/UserModel.php
+- ✅ app/Models/PlatformModel.php
+- ✅ app/Models/GenreModel.php
 - ✅ app/Router.php
 - ✅ app/Controllers/UserController.php
+- ✅ app/Controllers/PlatformController.php
+- ✅ app/Controllers/GenreController.php
 - ✅ public/index.php
-- ✅ app/Views/user/login.php
-- ✅ app/Views/user/register.php
-- ✅ app/Views/user/profile.php
+- ✅ app/Views/user/ (login, register, profile)
+- ✅ app/Views/platform/ (index, create)
+- ✅ app/Views/genre/ (index, create)
 
 ## À faire
-- ✅ Tester toutes les fonctionnalités User en navigateur
-- ⬜ assets/css/style.css
-- ⬜ Intégration template Figma
-- ⬜ Platforms + Genres
-- ⬜ Games
-- ⬜ User_games
+- ⬜ Games (Model, Controller, Views)
+- ⬜ User_games (collection personnelle)
+- ⬜ CSS / intégration template Figma
