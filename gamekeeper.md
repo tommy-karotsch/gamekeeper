@@ -15,31 +15,40 @@ sa collection de jeux vidéo personnalisée.
 gamekeeper/
 ├── app/
 │   ├── Controllers/
-│   │   └── UserController.php      ← ✅ propre
+│   │   └── UserController.php      ← ✅
 │   ├── Models/
-│   │   ├── Model.php               ← ✅ propre
-│   │   └── UserModel.php           ← ✅ propre
+│   │   ├── Model.php               ← ✅
+│   │   └── UserModel.php           ← ✅
 │   ├── Views/
 │   │   ├── layout/
-│   │   │   ├── header.php          ← ✅ propre 
-│   │   │   └── footer.php          ← ✅ propre 
+│   │   │   ├── header.php          ← ✅
+│   │   │   └── footer.php          ← ✅
 │   │   └── user/
-│   │       ├── login.php           ← ⬜ vide
-│   │       ├── register.php        ← ⬜ vide
-│   │       └── profile.php         ← ⬜ vide
-│   └── Router.php                  ← ⬜ vide
+│   │       ├── login.php           ← ✅
+│   │       ├── register.php        ← ✅
+│   │       └── profile.php         ← ✅
+│   └── Router.php                  ← ✅
 ├── config/
-│   └── Database.php                ← ✅ propre
+│   └── Database.php                ← ✅
 ├── public/
-│   └── index.php                   ← ⬜ vide
+│   └── index.php                   ← ✅
 ├── assets/
-│   └── css/style.css               ← ⬜ vide
-├── vendor/                         ← ✅ généré par Composer
-└── composer.json                   ← ⬜ vide
+│   └── css/style.css               ← ⬜ 
+├── vendor/                         ← ✅ 
+└── composer.json                   ← ✅
 
 ## Namespaces (composer.json)
 - App\    → app/
 - Config\ → config/
+
+## Routing
+URL pattern : /gamekeeper/public/?url=controller/method
+- ?url=user/login     → UserController::login()
+- ?url=user/register  → UserController::register()
+- ?url=user/profile   → UserController::profile()
+- ?url=user/edit      → UserController::edit()
+- ?url=user/logout    → UserController::logout()
+- ?url=user/delete    → UserController::delete()
 
 ## Base de données
 Tables :
@@ -61,35 +70,39 @@ Relations :
 - password_hash / password_verify pour les mots de passe
 - htmlspecialchars() dans les vues (protection XSS)
 - Requêtes préparées PDO (protection injection SQL)
-
-## ⚠️ Bugs connus à corriger
-
-### public/index.php
-5. Fichier vide → point d'entrée de toute l'application, doit être rempli
+- Champ caché name="type" pour distinguer les formulaires dans edit()
 
 ## Ordre de développement
-1. 🔧 Remplir public/index.php
-2. 🔧 Coder les vues user/ (login, register, profile)
-3. ⬜ Platforms + Genres
-4. ⬜ Games
-5. ⬜ User_games (collection personnelle)
-6. ⬜ CSS / intégration du template Figma
+1. ✅ composer.json
+2. ✅ app/Router.php
+3. ✅ public/index.php
+4. ✅ Vues user/ (login, register, profile)
+5. ⬜ Platforms + Genres
+6. ⬜ Games
+7. ⬜ User_games (collection personnelle)
+8. ⬜ CSS / intégration du template Figma
 
 ## Design
 - Template Figma existant (non prioritaire)
 
 ## Avancement
-- ✅ BDD créée et importée
+- ✅ BDD créée
 - ✅ Structure de dossiers en place
-- ✅ config/Database.php — connexion PDO
+- ✅ Composer configuré (PSR-4, autoload)
+- ✅ config/Database.php
 - ✅ app/Models/Model.php
-- ✅ app/Models/UserModel.php 
-- ✅ app/Controllers/UserController.php
-- ✅ Composer pas configuré (PSR-4, autoload)
+- ✅ app/Models/UserModel.php
 - ✅ app/Router.php
-- ✅ public/index.php 
+- ✅ app/Controllers/UserController.php
+- ✅ public/index.php
+- ✅ app/Views/user/login.php
+- ✅ app/Views/user/register.php
+- ✅ app/Views/user/profile.php
 
 ## À faire
-- ⬜ user/login — vides
-- ⬜ user/register — vides
-- ⬜ user/profile — vides
+- ✅ Tester toutes les fonctionnalités User en navigateur
+- ⬜ assets/css/style.css
+- ⬜ Intégration template Figma
+- ⬜ Platforms + Genres
+- ⬜ Games
+- ⬜ User_games

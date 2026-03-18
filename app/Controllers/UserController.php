@@ -117,7 +117,6 @@ class UserController
         require_once __DIR__ . '/../Views/user/profile.php';
     }
 
-
     // Modification
     public function edit(): void
     {
@@ -187,6 +186,29 @@ class UserController
         require_once __DIR__ . '/../Views/user/profile.php';
     }
 
+    // Suppression du compte
+    public function delete(): void
+    {
+        $this->requireAuth();
+        $errors = [];
+        $success = '';
+        $user = $this->userModel->findByID($_SESSION['user_id']);
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $password = $_POST['password'] ?? '';
+
+            if(!password_verify($password, $user['password'])){
+                $errors[] = "Mot de passe incorrect. Suppression annulée.";
+                require_once __DIR__ . '/../Views/user/profile.php';
+                return;
+            }
+
+            $this->userModel->delete($_SESSION['user_id']);
+            session_destroy();
+            header('Location: /gamekeeper/public/?url=user/login');
+            exit;
+        }
+    }
 
     // Si l'utilisateur est connecté
     private function requireAuth(): void

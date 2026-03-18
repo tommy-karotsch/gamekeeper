@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Models\GenreModel;
+
+class PlateformController
+{
+    private GenreModel $genreModel;
+
+    public function __construct()
+    {
+        $this->genreModel = new GenreModel();
+    }
+
+    public function index(): void
+    {
+        $genres = $this->genreModel->findAll();
+        require_once __DIR__ . '/../Views/genre/index.php';
+    }
+
+    public function create(): void
+    {
+        require_once __DIR__ . '/../Views/genre/create.php';
+    }
+
+    public function store(): void
+    {
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
+            {
+                $name = trim($_POST['name'] ?? '');
+
+                if(!empty($name)){
+                    $this->genreModel->create([':name' => $name]);
+                }
+            }
+           header('Location: /gamekeeper/public/?url=genre/index');
+            exit;
+    }
+
+    public function delete(): void
+    {
+        $id = $_GET['id'] ?? null;
+
+        $this->genreModel->delete((int)$id);
+        header('Location: /gamekeeper/public/?url=genre/index');
+        exit;
+    }
+}
