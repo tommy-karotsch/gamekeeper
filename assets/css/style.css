@@ -1,0 +1,128 @@
+/* =============================
+        VARIABLES & RESET
+   ============================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit&family=Poppins:wght@300;400&display=swap');
+
+:root {
+    --vert-accent     : #39D979;
+    --blanc           : #FFFFFF;
+    --header-gradient : linear-gradient(90deg, rgb(61,30,102) 0%, rgb(76,37,126) 25%, rgb(87,43,144) 50%, rgb(95,47,158) 65%, rgb(122,60,204) 85%);
+    --footer-gradient : linear-gradient(90deg, rgb(122,60,204) 15%, rgb(95,47,158) 35%, rgb(87,43,144) 50%, rgb(76,37,126) 75%, rgb(61,30,102) 100%);
+    --font-logo       : 'Kanit', sans-serif;
+    --font-body       : 'Poppins', sans-serif;
+}
+
+* {
+    margin  : 0;
+    padding : 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family     : var(--font-body);
+    background-color: var(--blanc);
+    min-height      : 100vh;
+    display         : flex;
+    flex-direction  : column;
+}
+
+/* =============================
+            HEADER
+   ============================= */
+
+header {
+    background : var(--header-gradient);
+    height     : 155px;
+    display    : flex;
+    align-items: center;
+    justify-content: space-between;
+    padding    : 0 38px;
+}
+
+.header-logo {
+    display    : flex;
+    align-items: center;
+    gap        : 12px;
+    text-decoration: none;
+}
+
+.header-logo img {
+    width : 50px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.header-logo span {
+    font-family: var(--font-logo);
+    font-size  : 40px;
+    color      : var(--vert-accent);
+}
+
+.header-logo .logo-separator {
+    width       : 1px;
+    height      : 79px;
+    background  : rgba(255,255,255,0.46);
+    margin-left : 12px;
+}
+
+.header-nav {
+    display    : flex;
+    align-items: center;
+    gap        : 16px;
+    font-size  : 20px;
+}
+
+.header-nav a {
+    color          : var(--vert-accent);
+    text-decoration: none;
+    font-family    : var(--font-body);
+}
+
+.header-nav a:hover {
+    text-decoration: underline;
+}
+
+.header-nav .separator {
+    color  : rgba(255,255,255,0.46);
+    font-weight: 300;
+}
+
+/* =============================
+            MAIN CONTENT
+   ============================= */
+
+main {
+    flex    : 1;
+    padding : 40px 160px;
+}
+
+/* =============================
+            FOOTER
+   ============================= */
+
+footer {
+    background : var(--footer-gradient);
+    height     : 155px;
+}
+
+/* =============================
+            PAGE ACCUEIL
+   ============================= */
+
+.home-body {
+    display        : flex;
+    align-items    : center;
+    justify-content: center;
+    min-height     : 755px;
+    border-radius  : 15px;
+}
+
+.home-title {
+    font-family   : var(--font-body);
+    font-size     : 54px;
+    color         : var(--vert-accent);
+    text-align    : center;
+    letter-spacing: 8.1px;
+    text-transform: uppercase;
+}

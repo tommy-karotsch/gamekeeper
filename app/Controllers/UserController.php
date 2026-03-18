@@ -56,7 +56,7 @@ class UserController
                         ':password' => $password,
                     ]);
                     $success = "Inscription réussie.";
-                    header('Location: /gamekeeper/app/views/user/login');
+                    header('Location: /gamekeeper/public/?url=user/login');
             }
         }
 

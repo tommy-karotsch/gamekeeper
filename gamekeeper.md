@@ -77,7 +77,7 @@ Relations :
 2. ✅ app/Router.php
 3. ✅ public/index.php
 4. ✅ Vues user/ (login, register, profile)
-5. ⬜ Platforms + Genres
+5. ✅ Platforms + Genres
 6. ⬜ Games
 7. ⬜ User_games (collection personnelle)
 8. ⬜ CSS / intégration du template Figma
