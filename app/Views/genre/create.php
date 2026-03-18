@@ -8,7 +8,7 @@
 <body>
     
     <h1>Ajouter un genre</h1>
-        <form method="POST" accept="/gamekeeper/public/?url=genre/store">
+        <form method="POST" action="/gamekeeper/public/?url=genre/store">
             <label for="name">Nom</label>
             <input type="text" name="name" id="name" required>
             <button type="submit">Ajouter</button>

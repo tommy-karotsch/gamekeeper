@@ -17,10 +17,10 @@
             <?php foreach($genres as $genre): ?>
                 <li>
                     <?= htmlspecialchars($genre['name']) ?>
-                    <a href="/gamekeeper/public/?url=genre/delete/&id=<?= $genre['id'] ?>">Supprimer</a>
+                    <a href="/gamekeeper/public/?url=genre/delete&id=<?= $genre['id'] ?>">Supprimer</a>
                 </li>
             <?php endforeach; ?>
         </ul>
     <?php endif; ?>
 </body>
-</html>
+</html> 
