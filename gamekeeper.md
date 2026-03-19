@@ -11,54 +11,90 @@ sa collection de jeux vidéo personnalisée.
 - Environnement : XAMPP (Windows)
 - Autoloading : Composer PSR-4
 
+## Modélisation (draw.io — gamekeeper_merise.drawio)
+
+### MCD (Modèle Conceptuel de Données)
+Entités :
+- UTILISATEUR (id, username, email, password, role, created_at)
+- JEU (id, titre, description, cover_image, date_sortie, created_at)
+- GENRE (id, nom)
+- PLATEFORME (id, nom)
+
+Associations :
+- APPARTENIR_À  : GENRE (0,n) ——— (1,1) JEU
+- DISPONIBLE_SUR : JEU (1,1) ——— (0,n) PLATEFORME
+- POSSÉDER : UTILISATEUR (0,n) ——— (0,n) JEU
+  → attributs portés : statut, temps_jeu, date_ajout
+
+### MLD (Modèle Logique de Données)
+- UTILISATEUR (id, username, email, password, role, created_at)
+- JEU (id, titre, description, cover_image, date_sortie, #genre_id, #platform_id, created_at)
+- GENRE (id, nom)
+- PLATEFORME (id, nom)
+- POSSÉDER (id, #user_id, #game_id, statut, temps_jeu, date_ajout)
+
+### MPD (Modèle Physique de Données)
+- users (PK id INT, username VARCHAR, email VARCHAR,
+         password VARCHAR, role ENUM, created_at TIMESTAMP)
+- games (PK id INT, title VARCHAR, description TEXT,
+         cover_image VARCHAR, release_date DATE,
+         FK platform_id INT, FK genre_id INT, created_at TIMESTAMP)
+- genres (PK id INT, name VARCHAR)
+- platforms (PK id INT, name VARCHAR)
+- user_games (PK id INT, FK user_id INT, FK game_id INT,
+              status ENUM('wish_list','playing','completed','abandoned'),
+              playtime INT, added_at TIMESTAMP)
+
 ## Arborescence
 gamekeeper/
 ├── app/
 │   ├── Controllers/
-│   │   ├── HomeController.php      ← ✅ 
-│   │   ├── UserController.php      ← ✅ 
-│   │   ├── PlatformController.php  ← ✅  (protégé admin)
-│   │   └── GenreController.php     ← ✅  (protégé admin)
+│   │   ├── HomeController.php      ← ✅
+│   │   ├── UserController.php      ← ✅
+│   │   ├── PlatformController.php  ← ✅ (protégé admin)
+│   │   ├── GenreController.php     ← ✅ (protégé admin)
+│   │   └── GameController.php      ← ✅ (protégé admin pour create/store/edit/update/delete)
 │   ├── Models/
-│   │   ├── Model.php               ← ✅ 
-│   │   ├── UserModel.php           ← ✅ 
-│   │   ├── PlatformModel.php       ← ✅ 
-│   │   └── GenreModel.php          ← ✅ 
+│   │   ├── Model.php               ← ✅
+│   │   ├── UserModel.php           ← ✅
+│   │   ├── PlatformModel.php       ← ✅
+│   │   ├── GenreModel.php          ← ✅
+│   │   └── GameModel.php           ← ✅ (findAllWithDetails avec JOIN)
 │   ├── Views/
 │   │   ├── layout/
 │   │   │   ├── header.php          ← ✅ stylisé (Figma)
 │   │   │   └── footer.php          ← ✅ stylisé (Figma)
 │   │   ├── home/
-│   │   │   └── index.php           ← ✅  (template Accueil)
+│   │   │   └── index.php           ← ✅ stylisé (template Accueil Figma)
 │   │   ├── user/
-│   │   │   ├── login.php           ← ⬜ à styliser
-│   │   │   ├── register.php        ← ⬜ à styliser
-│   │   │   └── profile.php         ← ⬜ à styliser (template Profil)
+│   │   │   ├── login.php           ← ✅ stylisé
+│   │   │   ├── register.php        ← ✅ stylisé
+│   │   │   └── profile.php         ← ✅ stylisé (template Profil Figma)
 │   │   ├── platform/
 │   │   │   ├── index.php           ← ⬜ à styliser (admin)
 │   │   │   └── create.php          ← ⬜ à styliser (admin)
 │   │   ├── genre/
 │   │   │   ├── index.php           ← ⬜ à styliser (admin)
 │   │   │   └── create.php          ← ⬜ à styliser (admin)
-│   │   ├── game/                   ← ⬜ à créer
-│   │   │   ├── index.php
-│   │   │   ├── show.php
-│   │   │   ├── create.php          ← admin
-│   │   │   └── edit.php            ← admin
+│   │   ├── game/
+│   │   │   ├── index.php           ← ✅ stylisé (template Collection Figma)
+│   │   │   ├── show.php            ← ✅ (amélioration prévue : afficher noms plateforme/genre)
+│   │   │   ├── create.php          ← ✅ admin
+│   │   │   └── edit.php            ← ✅ admin
 │   │   └── collection/             ← ⬜ à créer
-│   │       └── index.php           ← template Collection
-│   └── Router.php                  ← ✅ 
+│   │       └── index.php           ← template Collection Figma
+│   └── Router.php                  ← ✅
 ├── config/
-│   └── Database.php                ← ✅ 
+│   └── Database.php                ← ✅
 ├── public/
-│   └── index.php                   ← ✅ 
+│   └── index.php                   ← ✅
 ├── assets/
 │   ├── css/
 │   │   └── style.css               ← ✅ stylisé (variables Figma)
 │   └── img/
-│       └── logo-manette.png        ← ⬜ à télécharger depuis Figma
+│       └── logo-manette.png        ← ✅
 ├── vendor/                         ← ✅ généré par Composer
-└── composer.json                   ← ✅ 
+└── composer.json                   ← ✅
 
 ## Namespaces (composer.json)
 - App\    → app/
@@ -66,89 +102,111 @@ gamekeeper/
 
 ## Routing
 URL pattern : /gamekeeper/public/?url=controller/method
-- ?url=                   → HomeController::index()   (défaut)
-- ?url=user/login         → UserController::login()
-- ?url=user/register      → UserController::register()
-- ?url=user/profile       → UserController::profile()
-- ?url=user/edit          → UserController::edit()
-- ?url=user/logout        → UserController::logout()
-- ?url=user/delete        → UserController::delete()
-- ?url=platform/index     → PlatformController::index()
-- ?url=platform/create    → PlatformController::create()
-- ?url=platform/store     → PlatformController::store()
-- ?url=platform/delete    → PlatformController::delete()
-- ?url=genre/index        → GenreController::index()
-- ?url=genre/create       → GenreController::create()
-- ?url=genre/store        → GenreController::store()
-- ?url=genre/delete       → GenreController::delete()
+- ?url=                    → HomeController::index()  (défaut)
+- ?url=user/login          → UserController::login()
+- ?url=user/register       → UserController::register()
+- ?url=user/profile        → UserController::profile()
+- ?url=user/edit           → UserController::edit()
+- ?url=user/logout         → UserController::logout()
+- ?url=user/delete         → UserController::delete()
+- ?url=platform/index      → PlatformController::index()
+- ?url=platform/create     → PlatformController::create()
+- ?url=platform/store      → PlatformController::store()
+- ?url=platform/delete     → PlatformController::delete()
+- ?url=genre/index         → GenreController::index()
+- ?url=genre/create        → GenreController::create()
+- ?url=genre/store         → GenreController::store()
+- ?url=genre/delete        → GenreController::delete()
+- ?url=game/index          → GameController::index()
+- ?url=game/show&id=X      → GameController::show()
+- ?url=game/create         → GameController::create()
+- ?url=game/store          → GameController::store()
+- ?url=game/edit&id=X      → GameController::edit()
+- ?url=game/update&id=X    → GameController::update()
+- ?url=game/delete&id=X    → GameController::delete()
 
 ## Base de données
 Tables :
 - users (id, username, email, password, role ENUM('user','admin'), created_at)
-- games (id, title, description, cover_image, release_date, platform_id, genre_id, created_at)
+- games (id, title, description, cover_image, release_date,
+         platform_id FK, genre_id FK, created_at)
 - genres (id, name)
 - platforms (id, name)
-- user_games (id, user_id, game_id, status ENUM('wish_list','playing','completed','abandoned'), playtime, added_at)
+- user_games (id, user_id FK, game_id FK,
+              status ENUM('wish_list','playing','completed','abandoned'),
+              playtime INT, added_at)
 
 Relations :
-- user_games est la table pivot entre users et games
-- games dépend de platforms et genres (FK)
+- user_games est la table pivot entre users et games (relation POSSÉDER)
+- games dépend de platforms et genres (FK — DISPONIBLE_SUR / APPARTENIR_À)
 
 ## Patterns utilisés
 - Classe abstraite Model (findAll, findByID, delete communs)
-- UserModel / PlatformModel / GenreModel extends Model
+- Tous les modèles extends Model
 - Config\Database avec getConnection() (singleton PDO)
 - requireAuth() dans UserController (pages connectées)
-- requireAdmin() dans PlatformController + GenreController
+- requireAdmin() dans PlatformController, GenreController, GameController
 - password_hash / password_verify pour les mots de passe
 - htmlspecialchars() dans toutes les vues (XSS)
 - Requêtes préparées PDO (injection SQL)
 - Champ caché name="type" pour distinguer les formulaires dans edit()
 - header.php / footer.php inclus dans chaque vue via require_once
+- Accordéon JS pour la page profil
+- JOIN SQL dans GameModel::findAllWithDetails() (platform_name, genre_name)
 
 ## Design (Figma)
 Lien : https://www.figma.com/design/UBlKscbthjtT5a8tB3uDS3/GameKeeper
 
 Couleurs :
-- --vert-accent      : #39D979
-- --blanc            : #FFFFFF
-- --header-gradient  : linear-gradient(90deg, rgb(61,30,102) → rgb(122,60,204))
-- --footer-gradient  : linear-gradient(90deg, rgb(122,60,204) → rgb(61,30,102))
+- --vert-accent     : #39D979
+- --blanc           : #FFFFFF
+- --header-gradient : linear-gradient(90deg, rgb(61,30,102) → rgb(122,60,204))
+- --footer-gradient : linear-gradient(90deg, rgb(122,60,204) → rgb(61,30,102))
 
 Polices :
-- Kanit    → logo "GameKeeper"
-- Poppins  → textes, navigation
+- Kanit   → logo "GameKeeper"
+- Poppins → textes, navigation
 
 Templates Figma → Pages :
-- Index/Accueil  → home/index.php ✅, login.php, register.php
-- Collection     → game/index.php, collection/index.php
-- Profil         → user/profile.php
+- Index/Accueil → home/index.php ✅, login.php ✅, register.php ✅
+- Collection    → game/index.php ✅, collection/index.php ⬜
+- Profil        → user/profile.php ✅
+
+## Améliorations prévues pour profile.php
+- ⬜ Badge rôle (admin/user) dans la carte infos — faisable immédiatement
+- ⬜ Lien "Voir ma collection" dans l'accordéon — faisable immédiatement
+- ⬜ Stats de collection (total, en cours, terminés...) — à faire avec UserGamesModel
+
+## Améliorations prévues pour game/show.php
+- ⬜ Afficher le nom de la plateforme et du genre au lieu des IDs
+  → créer GameModel::findByIDWithDetails(int $id) avec JOIN
 
 ## Ordre de développement
 1. ✅ User (register, login, profile, edit, logout, delete)
 2. ✅ Platform + Genre (CRUD admin, protégé requireAdmin)
-3. ✅ Intégration Figma — layout (header, footer, style.css)
+3. ✅ Intégration Figma (header, footer, style.css)
 4. ✅ Page d'accueil (home/index.php)
-5. 🔧 Styliser login.php et register.php
-6. ⬜ Games (Model, Controller, Views)
-7. ⬜ User_games / Collection
-8. ⬜ Styliser profile.php (template Profil Figma)
-9. ⬜ Styliser collection/index.php (template Collection Figma)
-10. ⬜ Styliser pages admin (platform, genre, game/create, game/edit)
+5. ✅ Styliser login.php + register.php
+6. ✅ Styliser profile.php (accordéon + template Figma)
+7. ✅ Games (Model, Controller, Views)
+8. 🔧 User_games / Collection
+9. ⬜ Améliorations profile.php (badge rôle, lien collection, stats)
+10. ⬜ Amélioration game/show.php (JOIN plateforme/genre)
+11. ⬜ Styliser pages admin (platform, genre, game/create, game/edit)
 
 ## Avancement
 - ✅ BDD créée et importée
+- ✅ MCD + MLD + MPD modélisés (gamekeeper_merise.drawio)
 - ✅ Composer configuré (PSR-4, autoload)
 - ✅ config/Database.php
-- ✅ app/Models/ (Model, UserModel, PlatformModel, GenreModel)
-- ✅ app/Controllers/ (HomeController, UserController, PlatformController, GenreController)
+- ✅ app/Models/ (Model, UserModel, PlatformModel, GenreModel, GameModel)
+- ✅ app/Controllers/ (Home, User, Platform, Genre, Game)
 - ✅ app/Router.php
 - ✅ public/index.php
-- ✅ assets/css/style.css (variables Figma)
-- ✅ layout/header.php + footer.php (stylisés)
+- ✅ assets/css/style.css
+- ✅ layout/ (header + footer stylisés)
 - ✅ home/index.php
-- ✅ user/ (login, register, profile) — fonctionnels, pas encore stylisés
-- ✅ platform/ + genre/ (index, create) — fonctionnels, pas encore stylisés
-- ⬜ Télécharger logo-manette.png depuis Figma
-- ⬜ game/ (index, show, create, edit)
+- ✅ user/ (login, register, profile) stylisés
+- ✅ platform/ + genre/ fonctionnels (style à faire)
+- ✅ game/ (index, show, create, edit) fonctionnels
 - ⬜ collection/index.php

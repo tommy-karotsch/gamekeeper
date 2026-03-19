@@ -376,3 +376,177 @@ footer {
     background: #cc0000;
     color     : #fff;
 }
+
+
+/* =============================
+   PAGE COLLECTION / GAME INDEX
+   ============================= */
+
+.collection-wrapper {
+    display  : flex;
+    gap      : 30px;
+    padding  : 40px 160px;
+    min-height: 755px;
+}
+
+/* Sidebar gauche */
+.collection-sidebar {
+    width         : 200px;
+    flex-shrink   : 0;
+    background    : #f5f5f5;
+    border-radius : 12px;
+    padding       : 20px;
+}
+
+.collection-sidebar h2 {
+    font-size     : 14px;
+    color         : #999;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom : 16px;
+}
+
+.collection-sidebar ul {
+    list-style: none;
+}
+
+.collection-sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.collection-sidebar ul li a {
+    color          : #333;
+    text-decoration: none;
+    font-size      : 14px;
+    display        : block;
+    padding        : 6px 10px;
+    border-radius  : 6px;
+    transition     : background 0.2s, color 0.2s;
+}
+
+.collection-sidebar ul li a:hover,
+.collection-sidebar ul li a.active {
+    background: var(--header-gradient);
+    color     : var(--vert-accent);
+}
+
+/* Zone principale */
+.collection-main {
+    flex: 1;
+    display       : flex;
+    flex-direction: column;
+    gap           : 20px;
+}
+
+/* Barre du haut */
+.collection-topbar {
+    background   : #f5f5f5;
+    border-radius: 12px;
+    padding      : 16px 24px;
+    display      : flex;
+    align-items  : center;
+    justify-content: space-between;
+}
+
+.collection-topbar h1 {
+    font-family: var(--font-logo);
+    font-size  : 24px;
+    color      : #333;
+}
+
+.collection-topbar a {
+    background   : var(--header-gradient);
+    color        : var(--vert-accent);
+    padding      : 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size    : 14px;
+    transition   : opacity 0.2s;
+}
+
+.collection-topbar a:hover {
+    opacity: 0.85;
+}
+
+/* Grille de jeux */
+.games-grid {
+    display              : grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap                  : 20px;
+}
+
+.game-card {
+    background   : #f5f5f5;
+    border-radius: 12px;
+    overflow     : hidden;
+    transition   : transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color        : inherit;
+}
+
+.game-card:hover {
+    transform : translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.game-card-cover {
+    width           : 100%;
+    height          : 140px;
+    background      : var(--header-gradient);
+    display         : flex;
+    align-items     : center;
+    justify-content : center;
+    font-size       : 48px;
+}
+
+.game-card-body {
+    padding: 12px;
+}
+
+.game-card-title {
+    font-size    : 15px;
+    font-weight  : 400;
+    color        : #333;
+    margin-bottom: 6px;
+}
+
+.game-card-meta {
+    font-size: 12px;
+    color    : #999;
+}
+
+.game-card-actions {
+    display        : flex;
+    gap            : 8px;
+    padding        : 0 12px 12px;
+}
+
+.game-card-actions a {
+    font-size      : 12px;
+    padding        : 4px 10px;
+    border-radius  : 6px;
+    text-decoration: none;
+    transition     : opacity 0.2s;
+}
+
+.btn-edit {
+    background: var(--header-gradient);
+    color     : var(--vert-accent);
+}
+
+.btn-delete {
+    background: #ffeeee;
+    color     : #cc0000;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+    opacity: 0.8;
+}
+
+.empty-state {
+    text-align : center;
+    padding    : 60px;
+    color      : #aaa;
+    font-size  : 18px;
+}
