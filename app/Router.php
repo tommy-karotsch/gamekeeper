@@ -10,11 +10,11 @@ class Router
         
         $controllerName = isset($parts[0]) && $parts[0] !== ''
         ? ucfirst($parts[0]) . 'Controller'
-        : 'UserController';
+        : 'HomeController';
 
         $methodName = isset($parts[1]) && $parts [1] !== ''
         ? $parts [1]
-        : 'login';
+        : 'index';
 
         $controllerClass = "App\\Controllers\\{$controllerName}";
 
