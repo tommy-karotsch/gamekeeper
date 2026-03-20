@@ -59,7 +59,7 @@ gamekeeper/
 │   │   ├── UserModel.php           ← ✅
 │   │   ├── PlatformModel.php       ← ✅
 │   │   ├── GenreModel.php          ← ✅
-│   │   └── GameModel.php           ← ✅ (findAllWithDetails avec JOIN)
+│   │   └── GameModel.php           ← ✅ (findAllWithDetails + findByIDWithDetails)
 │   ├── Views/
 │   │   ├── layout/
 │   │   │   ├── header.php          ← ✅ stylisé (Figma)
@@ -78,7 +78,7 @@ gamekeeper/
 │   │   │   └── create.php          ← ⬜ à styliser (admin)
 │   │   ├── game/
 │   │   │   ├── index.php           ← ✅ stylisé (template Collection Figma)
-│   │   │   ├── show.php            ← ✅ (amélioration prévue : afficher noms plateforme/genre)
+│   │   │   ├── show.php            ← ✅ (affiche platform_name + genre_name)
 │   │   │   ├── create.php          ← ✅ admin
 │   │   │   └── edit.php            ← ✅ admin
 │   │   └── collection/             ← ⬜ à créer
@@ -152,7 +152,7 @@ Relations :
 - Champ caché name="type" pour distinguer les formulaires dans edit()
 - header.php / footer.php inclus dans chaque vue via require_once
 - Accordéon JS pour la page profil
-- JOIN SQL dans GameModel::findAllWithDetails() (platform_name, genre_name)
+- JOIN SQL dans GameModel (findAllWithDetails + findByIDWithDetails)
 
 ## Design (Figma)
 Lien : https://www.figma.com/design/UBlKscbthjtT5a8tB3uDS3/GameKeeper
@@ -177,10 +177,6 @@ Templates Figma → Pages :
 - ⬜ Lien "Voir ma collection" dans l'accordéon — faisable immédiatement
 - ⬜ Stats de collection (total, en cours, terminés...) — à faire avec UserGamesModel
 
-## Améliorations prévues pour game/show.php
-- ⬜ Afficher le nom de la plateforme et du genre au lieu des IDs
-  → créer GameModel::findByIDWithDetails(int $id) avec JOIN
-
 ## Ordre de développement
 1. ✅ User (register, login, profile, edit, logout, delete)
 2. ✅ Platform + Genre (CRUD admin, protégé requireAdmin)
@@ -191,8 +187,7 @@ Templates Figma → Pages :
 7. ✅ Games (Model, Controller, Views)
 8. 🔧 User_games / Collection
 9. ⬜ Améliorations profile.php (badge rôle, lien collection, stats)
-10. ⬜ Amélioration game/show.php (JOIN plateforme/genre)
-11. ⬜ Styliser pages admin (platform, genre, game/create, game/edit)
+10. ⬜ Styliser pages admin (platform, genre, game/create, game/edit)
 
 ## Avancement
 - ✅ BDD créée et importée
@@ -208,5 +203,5 @@ Templates Figma → Pages :
 - ✅ home/index.php
 - ✅ user/ (login, register, profile) stylisés
 - ✅ platform/ + genre/ fonctionnels (style à faire)
-- ✅ game/ (index, show, create, edit) fonctionnels
+- ✅ game/ (index, show, create, edit) fonctionnels et stylisés
 - ⬜ collection/index.php
