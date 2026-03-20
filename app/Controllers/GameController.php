@@ -34,7 +34,7 @@ class GameController
             exit;
         }
 
-        $game = $this->gameModel->findByID((int)$id);
+        $game = $this->gameModel->findByIDWithDetails((int)$id);
 
         if (!$game) {
             header('Location: /gamekeeper/public/?url=game/index');

@@ -41,4 +41,19 @@ class GameModel extends Model
         ");
         return $stmt->fetchAll();
     }
+
+    public function findByIDWithDetails(int $id): array|false
+    {
+        $stmt = $this->db->prepare("
+        SELECT games.*,
+               platforms.name AS platform_name,
+               genres.name    AS genre_name
+        FROM games
+        JOIN platforms ON games.platform_id = platforms.id
+        JOIN genres    ON games.genre_id    = genres.id
+        WHERE games.id = :id
+        ");
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch();
+    }
 }
