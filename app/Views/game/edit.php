@@ -1,5 +1,10 @@
-<?php require_once __DIR__ . '/../../layout/header.php'; ?>
+<?php
 
+require_once __DIR__ . '/../layout/header.php';
+
+require_once __DIR__ . '/../layout/footer.php';
+
+?>
 <main>
     <div class="form-container">
 
@@ -54,9 +59,9 @@
 
         </form>
 
-        <a href="/gamekeeper/public/?url=game/index">Retour à la liste</a>
+        <a class="link-back" href="/gamekeeper/public/?url=game/index">← Retour à la liste</a>
 
     </div>
 </main>
 
-<?php require_once __DIR__ . '/../../layout/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

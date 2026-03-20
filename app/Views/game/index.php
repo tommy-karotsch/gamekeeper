@@ -1,5 +1,10 @@
-<?php require_once __DIR__ . '/../../layout/header.php'; ?>
+<?php
 
+require_once __DIR__ . '/../layout/header.php';
+
+require_once __DIR__ . '/../layout/footer.php';
+
+?>
 <div class="collection-wrapper">
 
     <!-- Sidebar gauche -->
@@ -81,4 +86,4 @@
     </div>
 </div>
 
-<?php require_once __DIR__ . '/../../layout/footer.php'; ?>
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

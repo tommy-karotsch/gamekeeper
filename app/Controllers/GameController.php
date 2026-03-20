@@ -27,11 +27,22 @@ class GameController
 
     public function show(): void
     {
-        $id = $_GET['id'] ?? null;
+        $id   = $_GET['id'] ?? null;
+
+        if (!$id) {
+            header('Location: /gamekeeper/public/?url=game/index');
+            exit;
+        }
+
         $game = $this->gameModel->findByID((int)$id);
+
+        if (!$game) {
+            header('Location: /gamekeeper/public/?url=game/index');
+            exit;
+        }
+
         require_once __DIR__ . '/../Views/game/show.php';
     }
-
     public function create(): void 
     {
         $this->requireAdmin();
