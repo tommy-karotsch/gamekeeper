@@ -9,22 +9,26 @@ class UserGamesModel extends Model
     public function findByUserIDWithDetails(int $userID): array
     {
         $stmt = $this->db->prepare("
-        SELECT user_games.*,
-               games.title        AS game_title,
-               games.cover_image  AS game_cover_imgae,
-               games.release_date AS game_release_date,
-               platforms.name     AS platform_name,
-               genres.name        AS genre_name
-        FROM user_games
-        JOIN games      ON user_games.game_id   = games.id
-        JOIN platforms  ON games.platform_id    = platforms.id
-        JOIN genres     ON games.genre_id       = genres.id
-        WHERE user_games.user_id = :user_id
+            SELECT user_games.*,
+                games.title        AS game_title,
+                games.cover_image  AS cover_image,
+                games.release_date AS game_release_date,
+                GROUP_CONCAT(DISTINCT platforms.name ORDER BY platforms.name SEPARATOR ', ')
+                    AS platform_names,
+                GROUP_CONCAT(DISTINCT genres.name ORDER BY genres.name SEPARATOR ', ')
+                    AS genre_names
+            FROM user_games
+            JOIN games          ON user_games.game_id      = games.id
+            LEFT JOIN game_platforms ON games.id           = game_platforms.game_id
+            LEFT JOIN platforms      ON game_platforms.platform_id = platforms.id
+            LEFT JOIN game_genres    ON games.id           = game_genres.game_id
+            LEFT JOIN genres         ON game_genres.genre_id = genres.id
+            WHERE user_games.user_id = :user_id
+            GROUP BY user_games.id
         ");
         $stmt->execute([':user_id' => $userID]);
         return $stmt->fetchAll();
     }
-
     public function add(int $userID, int $gameID): bool 
     {
         $stmt = $this->db->prepare("

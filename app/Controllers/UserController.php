@@ -3,16 +3,18 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\UserGamesModel;
 
 class UserController
 {
     private UserModel $userModel;
+    private UserGamesModel $userGamesModel;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
+        $this->userGamesModel = new UserGamesModel();
     }
-
 
     // Inscription
     public function register(): void
@@ -62,7 +64,6 @@ class UserController
 
         require_once __DIR__ . '/../Views/user/register.php';
     }
-
 
     // Connexion
     public function login(): void
@@ -114,6 +115,7 @@ class UserController
         $errors = [];
         $success = '';
         $user   = $this->userModel->findByID($_SESSION['user_id']);
+        $stats   = $this->userGamesModel->getStats($_SESSION['user_id']);
         require_once __DIR__ . '/../Views/user/profile.php';
     }
 
@@ -158,6 +160,7 @@ class UserController
                         $_SESSION['username'] = $username;
                         $success = "Informations mises à jour.";
                         $user = $this->userModel->findByID($_SESSION['user_id']);
+                        $stats = $this->userGamesModel->getStats($_SESSION['user_id']);
                     }
                 }
 

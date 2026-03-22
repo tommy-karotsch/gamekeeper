@@ -41,16 +41,29 @@ class PlatformController
             exit;
     }
     
-    public function delete(): void 
+    public function delete(): void
     {
         $this->requireAdmin();
-        $id = $_GET['id'] ?? null;
+        $id        = $_GET['id'] ?? null;
+        $errors    = [];
+        $platforms = $this->platformModel->findAll();
 
-        $this->platformModel->delete((int)$id);
+        if ($id) {
+            // Vérifie si des jeux utilisent cette plateforme
+            $games = $this->platformModel->findGamesCount((int)$id);
+
+            if ($games > 0) {
+                $errors[] = "Impossible de supprimer cette plateforme car elle est utilisée par $games jeu(x).";
+                require_once __DIR__ . '/../Views/platform/index.php';
+                return;
+            }
+
+            $this->platformModel->delete((int)$id);
+        }
+
         header('Location: /gamekeeper/public/?url=platform/index');
         exit;
     }
-
     private function requireAdmin(): void
     {
         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {

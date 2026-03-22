@@ -26,4 +26,13 @@ class PlatformModel extends Model
         ");
         return $stmt->execute($data);
     }
+
+    public function findGamesCount(int $id): int
+    {
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) FROM games WHERE platform_id = :id
+        ");
+        $stmt->execute([':id' => $id]);
+        return (int)$stmt->fetchColumn();
+    }
 }

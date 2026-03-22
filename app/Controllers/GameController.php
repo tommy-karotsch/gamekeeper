@@ -55,17 +55,27 @@ class GameController
     {
         $this->requireAdmin();
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST')
-            {
-                $this->gameModel->create([
-                    ':title'    => trim($_POST['title'] ?? ''),
-                    ':description' => trim($_POST['description'] ?? ''),
-                    ':cover_image' => trim($_POST['cover_image'] ?? ''),
-                    ':release_date' => trim($_POST['release_date'] ?? ''),
-                    ':platform_id'  => trim($_POST['platform_id'] ?? ''),
-                    ':genre_id'     => trim($_POST['genre_id'] ?? ''),  
-                ]);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $platformIds = $_POST['platform_ids'] ?? [];
+            $genreIds    = $_POST['genre_ids']    ?? [];
+
+            $this->gameModel->create([
+                ':title'        => trim($_POST['title']        ?? ''),
+                ':description'  => trim($_POST['description']  ?? ''),
+                ':cover_image'  => trim($_POST['cover_image']  ?? ''),
+                ':release_date' => trim($_POST['release_date'] ?? ''),
+            ]);
+
+            $gameId = $this->gameModel->getLastInsertId();
+
+            foreach ($platformIds as $platformId) {
+                $this->gameModel->addPlatform($gameId, (int)$platformId);
             }
+            foreach ($genreIds as $genreId) {
+                $this->gameModel->addGenre($gameId, (int)$genreId);
+            }
+        }
+
         header('Location: /gamekeeper/public/?url=game/index');
         exit;
     }
@@ -85,30 +95,47 @@ class GameController
         $this->requireAdmin();
         $id = $_GET['id'] ?? null;
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $this->gameModel->update((int)$id,[
-                ':title'        => trim($_POST['title']         ?? ''),
-                ':description'  => trim($_POST['description']   ?? ''),
-                ':cover_image'  => trim($_POST['cover_image']   ?? ''),
-                ':release_date' => trim($_POST['release_date']  ?? ''),
-                ':platform_id'  => trim($_POST['platform_id']   ?? ''),
-                ':genre_id'     => trim($_POST['genre_id']      ?? ''),
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $platformIds = $_POST['platform_ids'] ?? [];
+            $genreIds    = $_POST['genre_ids']    ?? [];
+
+            $this->gameModel->update((int)$id, [
+                ':title'        => trim($_POST['title']        ?? ''),
+                ':description'  => trim($_POST['description']  ?? ''),
+                ':cover_image'  => trim($_POST['cover_image']  ?? ''),
+                ':release_date' => trim($_POST['release_date'] ?? ''),
             ]);
+
+            $this->gameModel->deletePlatforms((int)$id);
+            foreach ($platformIds as $platformId) {
+                $this->gameModel->addPlatform((int)$id, (int)$platformId);
+            }
+
+            $this->gameModel->deleteGenres((int)$id);
+            foreach ($genreIds as $genreId) {
+                $this->gameModel->addGenre((int)$id, (int)$genreId);
+            }
         }
+
         header('Location: /gamekeeper/public/?url=game/index');
         exit;
     }
-
+    
     public function delete(): void
     {
         $this->requireAdmin();
         $id = $_GET['id'] ?? null;
 
-        $this->gameModel->delete((int)$id);
+        if ($id) {
+            $this->gameModel->deleteFromCollection((int)$id);
+            $this->gameModel->deletePlatforms((int)$id);
+            $this->gameModel->deleteGenres((int)$id);
+            $this->gameModel->delete((int)$id);
+        }
+
         header('Location: /gamekeeper/public/?url=game/index');
         exit;
     }
-
     private function requireAdmin(): void
     {
         if(!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin'){

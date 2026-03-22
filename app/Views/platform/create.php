@@ -1,21 +1,24 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gamekeeper — Ajouter une plateforme</title>
-</head>
-<body>
+<?php require_once __DIR__ . '/../layout/header.php'; ?>
 
-    <h1>Ajouter une plateforme</h1>
+<main>
+    <div class="form-container">
 
-    <form method="POST" action="/gamekeeper/public/?url=platform/store">
-        <label for="name">Nom</label>
-        <input type="text" id="name" name="name" required>
-        <button type="submit">Ajouter</button>
-    </form>
+        <h1>Ajouter une plateforme</h1>
 
-    <a href="/gamekeeper/public/?url=platform/index">Retour</a>
+        <form method="POST" action="/gamekeeper/public/?url=platform/store">
+            <div class="form-group">
+                <label for="name">Nom de la plateforme</label>
+                <input type="text" id="name" name="name"
+                       placeholder="ex: PlayStation 5" required>
+            </div>
+            <button type="submit" class="btn-submit">Ajouter</button>
+        </form>
 
-</body>
-</html>
+        <a class="link-back" href="/gamekeeper/public/?url=platform/index">
+            ← Retour à la liste
+        </a>
+
+    </div>
+</main>
+
+<?php require_once __DIR__ . '/../layout/footer.php'; ?>

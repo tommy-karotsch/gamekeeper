@@ -16,16 +16,40 @@
     </a>
 
     <nav class="header-nav">
+
+        <a href="/gamekeeper/public/?url=game/index">🎮 Catalogue</a>
+
         <?php if (isset($_SESSION['user_id'])): ?>
-            <a href="/gamekeeper/public/?url=user/profile">
-                <?= htmlspecialchars($_SESSION['username']) ?>
+
+            <span class="separator">|</span>
+            <a href="/gamekeeper/public/?url=collection/index">📚 Ma collection</a>
+
+            <?php if ($_SESSION['role'] === 'admin'): ?>
+                <span class="separator">|</span>
+                <a href="/gamekeeper/public/?url=platform/index">🖥 Plateformes</a>
+                <span class="separator">|</span>
+                <a href="/gamekeeper/public/?url=genre/index">🏷 Genres</a>
+            <?php endif; ?>
+
+            <span class="separator">|</span>
+
+            <!-- ✅ Badge supprimé — le username seul suffit -->
+            <a href="/gamekeeper/public/?url=user/profile" class="nav-username">
+                👤 <?= htmlspecialchars($_SESSION['username']) ?>
             </a>
-            <span class="separator">|</span>
-            <a href="/gamekeeper/public/?url=user/logout">Se déconnecter</a>
+            <a href="/gamekeeper/public/?url=user/logout" class="nav-logout">
+                Déconnexion
+            </a>
+
         <?php else: ?>
-            <a href="/gamekeeper/public/?url=user/login">Se connecter</a>
+
             <span class="separator">|</span>
-            <a href="/gamekeeper/public/?url=user/register">S'inscrire</a>
+            <a href="/gamekeeper/public/?url=user/login">Se connecter</a>
+            <a href="/gamekeeper/public/?url=user/register" class="nav-register">
+                S'inscrire
+            </a>
+
         <?php endif; ?>
+
     </nav>
 </header>

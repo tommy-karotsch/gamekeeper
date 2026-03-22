@@ -2,7 +2,6 @@
 
 <div class="collection-wrapper">
 
-    <!-- Sidebar gauche -->
     <aside class="collection-sidebar">
         <h2>Navigation</h2>
         <ul>
@@ -29,10 +28,8 @@
         </ul>
     </aside>
 
-    <!-- Zone principale -->
     <div class="collection-main">
 
-        <!-- Barre du haut -->
         <div class="collection-topbar">
             <h1>Tous les jeux</h1>
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
@@ -40,7 +37,6 @@
             <?php endif; ?>
         </div>
 
-        <!-- Liste des jeux -->
         <?php if (empty($games)): ?>
             <div class="empty-state">
                 <p>Aucun jeu pour le moment.</p>
@@ -51,19 +47,45 @@
                     <div class="game-card">
 
                         <a href="/gamekeeper/public/?url=game/show&id=<?= $game['id'] ?>">
-                            <div class="game-card-cover">🎮</div>
+                            <div class="game-card-cover">
+                                <?php if (!empty($game['cover_image'])): ?>
+                                    <img src="<?= htmlspecialchars($game['cover_image']) ?>"
+                                        alt="<?= htmlspecialchars($game['title']) ?>">
+                                <?php else: ?>
+                                    🎮
+                                <?php endif; ?>
+                            </div>
                             <div class="game-card-body">
                                 <p class="game-card-title">
                                     <?= htmlspecialchars($game['title']) ?>
                                 </p>
-                                <p class="game-card-meta">
-                                    <?= htmlspecialchars($game['platform_name']) ?>
-                                    · <?= htmlspecialchars($game['genre_name']) ?>
-                                </p>
+                                <!-- Tags plateformes -->
+                                <div class="game-card-tags">
+                                    <?php
+                                    $platforms = explode(', ', $game['platform_names'] ?? '');
+                                    foreach ($platforms as $platform):
+                                        if (empty(trim($platform))) continue;
+                                    ?>
+                                        <span class="tag tag-platform">
+                                            🖥 <?= htmlspecialchars(trim($platform)) ?>
+                                        </span>
+                                    <?php endforeach; ?>
+                                </div>
+                                <!-- Tags genres -->
+                                <div class="game-card-tags">
+                                    <?php
+                                    $genres = explode(', ', $game['genre_names'] ?? '');
+                                    foreach ($genres as $genre):
+                                        if (empty(trim($genre))) continue;
+                                    ?>
+                                        <span class="tag tag-genre">
+                                            🏷 <?= htmlspecialchars(trim($genre)) ?>
+                                        </span>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </a>
 
-                        <!-- Boutons admin -->
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                             <div class="game-card-actions">
                                 <a class="btn-edit"
@@ -71,13 +93,13 @@
                                     Modifier
                                 </a>
                                 <a class="btn-delete"
-                                   href="/gamekeeper/public/?url=game/delete&id=<?= $game['id'] ?>">
+                                   href="/gamekeeper/public/?url=game/delete&id=<?= $game['id'] ?>"
+                                   onclick="return confirm('Supprimer ce jeu ?')">
                                     Supprimer
                                 </a>
                             </div>
                         <?php endif; ?>
 
-                        <!-- Bouton ajouter à la collection (utilisateurs connectés non admin) -->
                         <?php if (isset($_SESSION['user_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')): ?>
                             <div class="game-card-actions">
                                 <a class="btn-submit"
