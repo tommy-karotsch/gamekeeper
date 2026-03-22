@@ -1,8 +1,5 @@
-<?php
+<?php require_once __DIR__ . '/../layout/header.php'; ?>
 
-require_once __DIR__ . '/../layout/header.php';
-
-?>
 <div class="collection-wrapper">
 
     <!-- Sidebar gauche -->
@@ -52,6 +49,7 @@ require_once __DIR__ . '/../layout/header.php';
             <div class="games-grid">
                 <?php foreach ($games as $game): ?>
                     <div class="game-card">
+
                         <a href="/gamekeeper/public/?url=game/show&id=<?= $game['id'] ?>">
                             <div class="game-card-cover">🎮</div>
                             <div class="game-card-body">
@@ -64,6 +62,8 @@ require_once __DIR__ . '/../layout/header.php';
                                 </p>
                             </div>
                         </a>
+
+                        <!-- Boutons admin -->
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                             <div class="game-card-actions">
                                 <a class="btn-edit"
@@ -76,6 +76,17 @@ require_once __DIR__ . '/../layout/header.php';
                                 </a>
                             </div>
                         <?php endif; ?>
+
+                        <!-- Bouton ajouter à la collection (utilisateurs connectés non admin) -->
+                        <?php if (isset($_SESSION['user_id']) && (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin')): ?>
+                            <div class="game-card-actions">
+                                <a class="btn-submit"
+                                   href="/gamekeeper/public/?url=collection/add&game_id=<?= $game['id'] ?>">
+                                    + Ma collection
+                                </a>
+                            </div>
+                        <?php endif; ?>
+
                     </div>
                 <?php endforeach; ?>
             </div>

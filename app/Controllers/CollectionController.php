@@ -58,13 +58,13 @@ class CollectionController
         $this->requireAuth();
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $gameID = $_POST['game_id'] ?? null,
-            $status = $_POST['status']  ?? null,
-            $userID = $_SESSION['user_id'],
+            $gameID = $_POST['game_id'] ?? null;
+            $status = $_POST['status']  ?? null;
+            $userID = $_SESSION['user_id'];
 
             $allowedStatues = ['wish_list', 'playing', 'completed', 'abandoned'];
 
-            if($agemID && $status && in_array($status, $allowedStatues)){
+            if($gameID && $status && in_array($status, $allowedStatues)){
                 $this->userGamesModel->updateStatus($userID, (int)$gameID, $status);
             }
         }
@@ -77,12 +77,12 @@ class CollectionController
         $this->requireAuth();
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $gameID    = $_POST['game_id'] ?? null,
-            $playtime  = $_POST['playtime'] ?? null,
+            $gameID    = $_POST['game_id'] ?? null;
+            $playtime  = $_POST['playtime'] ?? null;
             $userID    = $_SESSION['user_id'];
 
             if($gameID && is_numeric($playtime) && $playtime >= 0){
-                $this->userGameModel->updatePlaytime($userID, (int)$gameID, (int)$playtime);
+                $this->userGamesModel->updatePlaytime($userID, (int)$gameID, (int)$playtime);
             }
         }
         header('Location: /gamekeeper/public/?url=collection/index');

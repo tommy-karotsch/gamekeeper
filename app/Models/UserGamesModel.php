@@ -87,14 +87,14 @@ class UserGamesModel extends Model
     public function getStats(int $userID): array
     {
         $stmt = $this->db->prepare("
-        SELECT
-            COUNT(*) AS total,
-            SUM(status = 'playing') AS playing,
-            SUM(status = 'completed') AS completed,
-            SUM(status = 'abandoned') AS abandoned,
-            SUM(status = 'wish_list') AS wishlist
-        FROM user_games
-        WHERE user_id = :user_id
+            SELECT
+                COUNT(*)                          AS total,
+                COALESCE(SUM(status = 'playing'),   0) AS playing,
+                COALESCE(SUM(status = 'completed'), 0) AS completed,
+                COALESCE(SUM(status = 'abandoned'), 0) AS abandoned,
+                COALESCE(SUM(status = 'wish_list'), 0) AS wish_list
+            FROM user_games
+            WHERE user_id = :user_id
         ");
         $stmt->execute([':user_id' => $userID]);
         return $stmt->fetch();

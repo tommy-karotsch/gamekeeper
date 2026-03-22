@@ -583,3 +583,99 @@ footer {
     align-items: center;
     margin-bottom: 20px;
 }
+
+/* =============================
+   SIDEBAR STATS
+   ============================= */
+
+.sidebar-stats {
+    margin-top   : 24px;
+    border-top   : 1px solid #e0e0e0;
+    padding-top  : 16px;
+}
+
+.sidebar-stats ul {
+    list-style: none;
+}
+
+.sidebar-stats ul li {
+    display        : flex;
+    justify-content: space-between;
+    font-size      : 13px;
+    color          : #555;
+    padding        : 4px 0;
+}
+
+.sidebar-stats ul li span:last-child {
+    font-weight: 600;
+    color      : var(--vert-accent);
+}
+
+/* =============================
+   STATUT + TEMPS DE JEU
+   ============================= */
+
+.status-select {
+    width        : 100%;
+    padding      : 6px 8px;
+    border       : 1px solid #ddd;
+    border-radius: 6px;
+    font-family  : var(--font-body);
+    font-size    : 12px;
+    cursor       : pointer;
+    background   : #fff;
+}
+
+.status-select:focus {
+    outline     : none;
+    border-color: var(--vert-accent);
+}
+
+.game-card-playtime {
+    padding: 0 12px 8px;
+}
+
+.game-card-playtime form {
+    display    : flex;
+    align-items: center;
+    gap        : 6px;
+}
+
+.playtime-input {
+    flex         : 1;
+    padding      : 6px 10px;
+    border       : 1px solid #ddd;
+    border-radius: 6px;
+    font-family  : var(--font-body);
+    font-size    : 12px;
+    outline      : none;
+    color        : #333;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.playtime-input::-webkit-outer-spin-button,
+.playtime-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin            : 0;
+}
+
+.playtime-input:focus {
+    border-color: var(--vert-accent);
+}
+
+.btn-playtime {
+    padding      : 6px 12px;
+    background   : var(--header-gradient);
+    color        : var(--vert-accent);
+    border       : none;
+    border-radius: 6px;
+    cursor       : pointer;
+    font-size    : 14px;
+    transition   : opacity 0.2s;
+    flex-shrink  : 0;
+}
+
+.btn-playtime:hover {
+    opacity: 0.85;
+}
