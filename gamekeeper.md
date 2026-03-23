@@ -21,26 +21,29 @@ Entités :
 - PLATEFORME (id, nom)
 
 Associations :
-- APPARTENIR_À  : GENRE (0,n) ——— (1,1) JEU
-- DISPONIBLE_SUR : JEU (1,1) ——— (0,n) PLATEFORME
+- APPARTENIR_À  : GENRE (0,n) ——— (0,n) JEU  ← table pivot game_genres
+- DISPONIBLE_SUR : JEU (0,n) ——— (0,n) PLATEFORME ← table pivot game_platforms
 - POSSÉDER : UTILISATEUR (0,n) ——— (0,n) JEU
   → attributs portés : statut, temps_jeu, date_ajout
 
 ### MLD (Modèle Logique de Données)
 - UTILISATEUR (id, username, email, password, role, created_at)
-- JEU (id, titre, description, cover_image, date_sortie, #genre_id, #platform_id, created_at)
+- JEU (id, titre, description, cover_image, date_sortie, created_at)
 - GENRE (id, nom)
 - PLATEFORME (id, nom)
+- GAME_PLATFORMS (id, #game_id, #platform_id)
+- GAME_GENRES (id, #game_id, #genre_id)
 - POSSÉDER (id, #user_id, #game_id, statut, temps_jeu, date_ajout)
 
 ### MPD (Modèle Physique de Données)
 - users (PK id INT, username VARCHAR, email VARCHAR,
          password VARCHAR, role ENUM, created_at TIMESTAMP)
 - games (PK id INT, title VARCHAR, description TEXT,
-         cover_image VARCHAR, release_date DATE,
-         FK platform_id INT, FK genre_id INT, created_at TIMESTAMP)
+         cover_image VARCHAR, release_date DATE, created_at TIMESTAMP)
 - genres (PK id INT, name VARCHAR)
 - platforms (PK id INT, name VARCHAR)
+- game_platforms (PK id INT, FK game_id INT, FK platform_id INT)
+- game_genres (PK id INT, FK game_id INT, FK genre_id INT)
 - user_games (PK id INT, FK user_id INT, FK game_id INT,
               status ENUM('wish_list','playing','completed','abandoned'),
               playtime INT, added_at TIMESTAMP)
@@ -58,33 +61,33 @@ gamekeeper/
 │   ├── Models/
 │   │   ├── Model.php                   ← ✅
 │   │   ├── UserModel.php               ← ✅
-│   │   ├── PlatformModel.php           ← ✅
-│   │   ├── GenreModel.php              ← ✅
-│   │   ├── GameModel.php               ← ✅ (findAllWithDetails + findByIDWithDetails)
-│   │   └── UserGamesModel.php          ← ✅
+│   │   ├── PlatformModel.php           ← ✅ (findGamesCount pour protection suppression)
+│   │   ├── GenreModel.php              ← ✅ (findGamesCount pour protection suppression)
+│   │   ├── GameModel.php               ← ✅ (game_platforms + game_genres + GROUP_CONCAT)
+│   │   └── UserGamesModel.php          ← ✅ (JOIN via game_platforms + game_genres)
 │   ├── Views/
 │   │   ├── layout/
-│   │   │   ├── header.php              ← ✅ stylisé (Figma)
+│   │   │   ├── header.php              ← ✅ stylisé (Figma + nav complète)
 │   │   │   └── footer.php              ← ✅ stylisé (Figma)
 │   │   ├── home/
 │   │   │   └── index.php               ← ✅ stylisé (template Accueil Figma)
 │   │   ├── user/
 │   │   │   ├── login.php               ← ✅ stylisé
 │   │   │   ├── register.php            ← ✅ stylisé
-│   │   │   └── profile.php             ← ✅ stylisé (template Profil Figma)
+│   │   │   └── profile.php             ← ✅ stylisé (badge rôle + stats + lien collection)
 │   │   ├── platform/
-│   │   │   ├── index.php               ← ⬜ à styliser (admin)
-│   │   │   └── create.php              ← ⬜ à styliser (admin)
+│   │   │   ├── index.php               ← ✅ stylisé (admin)
+│   │   │   └── create.php              ← ✅ stylisé (admin)
 │   │   ├── genre/
-│   │   │   ├── index.php               ← ⬜ à styliser (admin)
-│   │   │   └── create.php              ← ⬜ à styliser (admin)
+│   │   │   ├── index.php               ← ✅ stylisé (admin)
+│   │   │   └── create.php              ← ✅ stylisé (admin)
 │   │   ├── game/
-│   │   │   ├── index.php               ← ✅ stylisé (template Collection Figma)
-│   │   │   ├── show.php                ← ✅
-│   │   │   ├── create.php              ← ⬜ à styliser (admin)
-│   │   │   └── edit.php                ← ⬜ à styliser (admin)
+│   │   │   ├── index.php               ← ✅ stylisé (tags plateforme/genre)
+│   │   │   ├── show.php                ← ✅ (cover_image + platform_names + genre_names)
+│   │   │   ├── create.php              ← ✅ redesign 2 colonnes + checkboxes
+│   │   │   └── edit.php                ← ✅ redesign 2 colonnes + checkboxes pré-sélectionnés
 │   │   └── collection/
-│   │       └── index.php               ← ✅ stylisé (template Collection Figma)
+│   │       └── index.php               ← ✅ stylisé (tags plateforme/genre + cover_image)
 │   └── Router.php                      ← ✅
 ├── config/
 │   └── Database.php                    ← ✅
@@ -135,17 +138,19 @@ URL pattern : /gamekeeper/public/?url=controller/method
 ## Base de données
 Tables :
 - users (id, username, email, password, role ENUM('user','admin'), created_at)
-- games (id, title, description, cover_image, release_date,
-         platform_id FK, genre_id FK, created_at)
+- games (id, title, description, cover_image, release_date, created_at)
 - genres (id, name)
 - platforms (id, name)
+- game_platforms (id, game_id FK, platform_id FK)  ← table pivot
+- game_genres (id, game_id FK, genre_id FK)         ← table pivot
 - user_games (id, user_id FK, game_id FK,
               status ENUM('wish_list','playing','completed','abandoned'),
               playtime INT, added_at)
 
 Relations :
-- user_games est la table pivot entre users et games (relation POSSÉDER)
-- games dépend de platforms et genres (FK — DISPONIBLE_SUR / APPARTENIR_À)
+- game_platforms : relation N-N entre games et platforms
+- game_genres    : relation N-N entre games et genres
+- user_games     : table pivot entre users et games (relation POSSÉDER)
 
 ## Patterns utilisés
 - Classe abstraite Model (findAll, findByID, delete communs)
@@ -159,8 +164,11 @@ Relations :
 - Champ caché name="type" pour distinguer les formulaires dans edit()
 - header.php / footer.php inclus dans chaque vue via require_once
 - Accordéon JS pour la page profil
-- JOIN SQL dans GameModel + UserGamesModel
+- GROUP_CONCAT + DISTINCT dans GameModel + UserGamesModel
 - COALESCE() dans getStats() pour éviter les valeurs NULL
+- confirm() JS sur les suppressions
+- Tags CSS distincts pour plateformes (violet) et genres (vert)
+- Checkboxes scrollables pour sélection multiple plateformes/genres
 
 ## Design (Figma)
 Lien : https://www.figma.com/design/UBlKscbthjtT5a8tB3uDS3/GameKeeper
@@ -180,11 +188,6 @@ Templates Figma → Pages :
 - Collection    → game/index.php ✅, collection/index.php ✅
 - Profil        → user/profile.php ✅
 
-## Améliorations prévues pour profile.php
-- ⬜ Badge rôle (admin/user) dans la carte infos — faisable immédiatement
-- ⬜ Lien "Voir ma collection" dans l'accordéon — faisable immédiatement
-- ⬜ Stats de collection (total, en cours, terminés...) — UserGamesModel prêt ✅
-
 ## Sécurité (non prioritaire — à faire plus tard)
 - ⬜ CSRF — protection des formulaires
 - ⬜ Validation des données dans GameController::store() et update()
@@ -197,12 +200,13 @@ Templates Figma → Pages :
 3.  ✅ Intégration Figma (header, footer, style.css)
 4.  ✅ Page d'accueil
 5.  ✅ Styliser login.php + register.php
-6.  ✅ Styliser profile.php
+6.  ✅ Styliser profile.php (badge rôle, stats, lien collection)
 7.  ✅ Games (Model, Controller, Views)
 8.  ✅ User_games / Collection
-9.  🔧 Améliorations profile.php (badge rôle, lien collection, stats)
-10. 🔧 Styliser pages admin (platform, genre, game/create, game/edit)
-11. ⬜ Sécurité (non prioritaire)
+9.  ✅ Styliser pages admin (platform, genre, game/create, game/edit)
+10. ✅ Migration N-N plateformes + genres (game_platforms, game_genres)
+11. ✅ Cover image sur les cards et show
+12. ⬜ Sécurité (non prioritaire)
 
 ## Avancement
 - ✅ BDD créée et importée
@@ -217,6 +221,6 @@ Templates Figma → Pages :
 - ✅ layout/ (header + footer stylisés)
 - ✅ home/index.php
 - ✅ user/ (login, register, profile) stylisés
-- ✅ platform/ + genre/ fonctionnels (style à faire)
-- ✅ game/ (index, show, create, edit) fonctionnels
-- ✅ collection/index.php fonctionnel et stylisé
+- ✅ platform/ + genre/ stylisés
+- ✅ game/ (index, show, create, edit) stylisés et fonctionnels
+- ✅ collection/index.php stylisé et fonctionnel

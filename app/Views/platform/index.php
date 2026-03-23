@@ -1,9 +1,18 @@
 <?php require_once __DIR__ . '/../layout/header.php'; ?>
 
-<main>
-    <div class="admin-wrapper">
+<div class="collection-wrapper">
 
-        <div class="admin-topbar">
+    <aside class="collection-sidebar">
+        <h2>Navigation</h2>
+        <ul>
+            <li><a href="/gamekeeper/public/?url=game/index">Tous les jeux</a></li>
+            <li><a href="/gamekeeper/public/?url=platform/index" class="active">Plateformes</a></li>
+            <li><a href="/gamekeeper/public/?url=genre/index">Genres</a></li>
+        </ul>
+    </aside>
+
+    <div class="collection-main">
+        <div class="collection-topbar">
             <h1>🖥 Plateformes</h1>
             <a href="/gamekeeper/public/?url=platform/create" class="btn-admin-add">
                 + Ajouter une plateforme
@@ -26,8 +35,8 @@
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
-
     </div>
-</main>
+
+</div>
 
 <?php require_once __DIR__ . '/../layout/footer.php'; ?>

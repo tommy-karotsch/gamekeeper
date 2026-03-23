@@ -90,7 +90,7 @@ class UserController
                     $_SESSION['user_id']  = $user ['id'];
                     $_SESSION['username'] = $user['username'];
                     $_SESSION['role']     = $user['role'];
-                    header('Location: /gamekeeper/public/?url=user/profile');
+                    header('Location: /gamekeeper/public/?url=home/index');
                     exit;
                 }
             }
